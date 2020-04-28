@@ -1,27 +1,19 @@
 require 'rubygems'
 require 'bundler/setup'
+require './settings'
 
 Bundler.require(:default)
 
-# Please set the values here
-proxy_key = ''
-base_host = ''
-auth = ''
-target_host = ''
-path = ''
-
 puts "This tool allows you to compare the same path on different domains"
-puts "Please enter the path: default: #{path}"
+puts "Please enter the path:"
 input = gets.chomp
 path = input if !input.to_s.strip.empty?
-puts "Please enter the base hostname: default: #{base_host}"
-input = gets.chomp
-base_host = input if !input.to_s.strip.empty?
-puts "Please enter the target hostname: default: #{target_host}"
-input = gets.chomp
-target_host = input if !input.to_s.strip.empty?
 
-page1 = RestClient.get(base_host + path, cookies: { proxyKey: proxy_key })
+base_host = Settings::BASE_HOST
+target_host = Settings::TARGET_HOST.clone
+target_host = target_host.insert('https://'.size, Settings::BASIC_AUTH + '@')
+
+page1 = RestClient.get(base_host + path, cookies: { proxyKey: Settings::PROXY_KEY })
 
 doc = Nokogiri::HTML.parse(page1)
 
@@ -33,7 +25,7 @@ nodeset = doc.xpath('//a[@href]/@href')
 nodeset.map { |element| element["href"] }.compact
 outlinks1 = nodeset.to_a.map(&:to_s)
 
-page2 = RestClient.get(target_host + path, cookies: { proxyKey: proxy_key })
+page2 = RestClient.get(target_host + path, cookies: { proxyKey: Settings::PROXY_KEY })
 
 doc = Nokogiri::HTML.parse(page2)
 
@@ -46,11 +38,11 @@ nodeset.map { |element| element["href"] }.compact
 outlinks2 = nodeset.to_a.map(&:to_s)
 
 hreflangs2.map! do |hreflang|
-    hreflang.sub(target_host.sub(auth, ''), base_host)
+  hreflang.sub(Settings::TARGET_HOST, Settings::BASE_HOST)
 end
 
 outlinks2.map! do |outlink|
-    outlink.sub(target_host.sub(auth, ''), base_host)
+  outlink.sub(Settings::TARGET_HOST, Settings::BASE_HOST)
 end
 
 additional_hreflangs = hreflangs2 - hreflangs1

@@ -1,0 +1,6 @@
+class Settings
+  PROXY_KEY = ''
+  BASE_HOST = ''
+  TARGET_HOST = ''
+  BASIC_AUTH = ''
+end
