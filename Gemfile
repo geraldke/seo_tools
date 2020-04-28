@@ -1,3 +1,5 @@
-gem 'nokogiri', '~> 1.6', '>= 1.6.8'
+source 'https://rubygems.org'
+
+gem "nokogiri", ">= 1.10.8"
 gem 'rest-client'
 gem 'awesome_print'

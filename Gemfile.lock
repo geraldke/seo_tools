@@ -1,4 +1,5 @@
 GEM
+  remote: https://rubygems.org/
   specs:
     awesome_print (1.8.0)
     domain_name (0.5.20180417)
@@ -10,7 +11,7 @@ GEM
     mime-types-data (3.2019.0331)
     mini_portile2 (2.4.0)
     netrc (0.11.0)
-    nokogiri (1.10.3)
+    nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
     rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
@@ -25,7 +26,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
-  nokogiri (~> 1.6, >= 1.6.8)
+  nokogiri (>= 1.10.8)
   rest-client
 
 BUNDLED WITH
